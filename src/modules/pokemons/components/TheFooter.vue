@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import BaseButton from "@/components/BaseButton.vue";
 import ListIcon from "@/components/icons/IconAll.vue";
 import StarIcon from "@/components/icons/IconStar.vue";
-import { ref } from "vue";
 
 enum ButtonTypes {
   ALL = "all",

@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { ref, type Component } from 'vue';
-import WelcomeView from './modules/pokemons/views/WelcomeView.vue';
-import PokemonsListView from './modules/pokemons/views/PokemonsListView.vue';
-import LoadingView from './modules/pokemons/views/LoadingView.vue';
+import { VueQueryDevtools } from "@tanstack/vue-query-devtools";
+import { useApp } from "./modules/pokemons/composables/useApp";
 
-
-const currentView: Component = ref({
-  WelcomeView,
-  PokemonsListView,
-  LoadingView,
-});
-
-currentView.value = PokemonsListView;
+const { currentComponent } = useApp();
 </script>
 
 <template>
   <div class="max-w-screen max-h-screen overflow-hidden">
-    <component :is="currentView" />
+    <component :is="currentComponent" />
   </div>
+  <VueQueryDevtools />
 </template>
 
 <style scoped></style>

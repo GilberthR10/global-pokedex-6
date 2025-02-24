@@ -1,41 +1,31 @@
-// src/components/pokemon/PokemonDetailModal.vue
 <script setup lang="ts">
-import BaseModal from '@/components/BaseModal.vue'
-import BaseCircleButton from '@/components/BaseCircleButton.vue'
-import BaseButton from '@/components/BaseButton.vue'
-
-interface Pokemon {
-  id: number
-  name: string
-  weight: number
-  height: number
-  types: string[]
-  imageUrl: string
-  isFavorite?: boolean
-}
+import BaseModal from "@/components/BaseModal.vue";
+import BaseCircleButton from "@/components/BaseCircleButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import type { Pokemon } from "../../interfaces/index.ts";
 
 interface Props {
-  isOpen: boolean
-  pokemon: Pokemon
+  isOpen: boolean;
+  pokemon: Pokemon;
 }
 
 withDefaults(defineProps<Props>(), {
-  isOpen: false
-})
+  isOpen: false,
+});
 
 const emit = defineEmits<{
-  (e: 'close'): void
-  (e: 'toggleFavorite'): void
-  (e: 'share'): void
-}>()
+  (e: "close"): void;
+  (e: "toggleFavorite"): void;
+  (e: "share"): void;
+}>();
 
 const handleShare = () => {
-  emit('share')
-}
+  emit("share");
+};
 
 const handleToggleFavorite = () => {
-  emit('toggleFavorite')
-}
+  emit("toggleFavorite");
+};
 </script>
 
 <template>
@@ -43,8 +33,13 @@ const handleToggleFavorite = () => {
     <div class="flex flex-col gap-2 max-w-full">
       <!-- Pokemon Image -->
       <div
-        class="relative bg-blue-100 rounded-t-lg overflow-hidden bg-[url(@/assets/pokemon-bg.png)] bg-center bg-cover">
-        <img :src="pokemon.imageUrl" :alt="pokemon.name" class="w-full h-48 object-contain" />
+        class="relative bg-blue-100 rounded-t-lg overflow-hidden bg-[url(@/assets/pokemon-bg.png)] bg-center bg-cover"
+      >
+        <img
+          :src="pokemon.image || undefined"
+          :alt="pokemon.name"
+          class="w-full h-48 object-contain block"
+        />
       </div>
 
       <!-- Pokemon Details -->
@@ -66,12 +61,12 @@ const handleToggleFavorite = () => {
 
         <div class="flex items-center border-b border-gray-300 gap-x-2">
           <span class="font-bold">Types:</span>
-          <span class="text-gray-700">{{ pokemon.types.join(', ') }}</span>
+          <span class="text-gray-700">{{ pokemon.types.join(", ") }}</span>
         </div>
       </div>
 
       <!-- Actions -->
-      <div class="flex items-center self-center gap-10 p-6 pt-0 ">
+      <div class="flex items-center self-center gap-10 p-6 pt-0">
         <BaseButton :active="true" icon-position="left" @clicked="handleShare">
           Share to my friends
         </BaseButton>
