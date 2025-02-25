@@ -43,7 +43,7 @@ const handleToggleFavorite = () => {
       </div>
 
       <!-- Pokemon Details -->
-      <div class="space-y-3 py-4 px-10">
+      <div class="space-y-3 py-4 px-10 capitalize">
         <div class="flex items-center border-b border-gray-300 gap-x-2">
           <span class="font-bold">Name: </span>
           <span class="text-gray-700 font-medium">{{ pokemon.name }}</span>
@@ -61,7 +61,9 @@ const handleToggleFavorite = () => {
 
         <div class="flex items-center border-b border-gray-300 gap-x-2">
           <span class="font-bold">Types:</span>
-          <span class="text-gray-700">{{ pokemon.types.join(", ") }}</span>
+          <span class="text-gray-700">{{
+            pokemon.types.map((t) => t.type.name).join(", ")
+          }}</span>
         </div>
       </div>
 

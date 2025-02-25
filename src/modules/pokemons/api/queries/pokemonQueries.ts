@@ -24,6 +24,5 @@ export const pokemonByName = (name: string) => {
   return useQuery<Pokemon, Error>({
     queryKey: QUERY_KEYS.pokemon(name),
     queryFn: () => getPokemonByName(name),
-    enabled: !!name,
   });
 };

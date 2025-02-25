@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import BaseCircleButton from "@/components/BaseCircleButton.vue";
-
-interface Pokemon {
-  id: number;
-  name: string;
-  isFavorite?: boolean;
-}
+import type { Pokemon } from "../interfaces/pokemon";
 
 interface Props {
   pokemon: Pokemon;
@@ -30,7 +25,7 @@ const handleClick = () => {
 
 <template>
   <div
-    class="p-5 flex items-center justify-between font-bold shadow-2xs bg-white rounded-lg cursor-pointer"
+    class="h-[80px] mb-[10px] p-5 flex items-center justify-between font-bold shadow-2xs bg-white rounded-lg cursor-pointer"
     @click.stop="handleClick"
   >
     <!-- Pokemon Name -->

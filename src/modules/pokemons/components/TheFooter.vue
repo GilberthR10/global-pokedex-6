@@ -41,6 +41,9 @@ const emit = defineEmits<{
 const activeButton = ref<ButtonTypes>(ButtonTypes.ALL);
 
 const handleButtonClick = (type: ButtonTypes) => {
+  if (activeButton.value === type) {
+    return;
+  }
   activeButton.value = type;
   emit("changeView", type);
 };

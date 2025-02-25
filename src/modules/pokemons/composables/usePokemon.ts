@@ -1,15 +1,20 @@
-import { watch, computed } from "vue";
-import { pokemonList, pokemonByName } from "../api";
+import { watch, computed, ref } from "vue";
+import { pokemonList } from "../api";
 import { storeToRefs } from 'pinia'
 import { usePokemonStore } from "@/stores/pokemon";
+import type { Pokemon } from "../interfaces";
+
 
 
 export const usePokemons = () => {
+  const pokemonsFinded = ref<Pokemon[]>([]);
+
   const store = usePokemonStore()
+
   const {
     pokemonsList,
     favorites,
-    favoritedPokemons
+    favoritedPokemons,
   } = storeToRefs(store)
 
   const { isLoading: isLoadingList, data, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = pokemonList();
@@ -18,17 +23,13 @@ export const usePokemons = () => {
     if (!data.value) return [];
     store.setPokemons(data.value.pages.flatMap(page => page.pokemon))
   })
+
+
   const allPokemons = computed(() => {
     if (!data.value) return [];
     return pokemonsList.value
   });
 
-
-  const searchPokemon = async (term: string) => {
-    if (!term) return;
-    const { data, isLoading } = pokemonByName(term);
-    return { data, isLoading }
-  };
 
 
   return {
@@ -39,6 +40,7 @@ export const usePokemons = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    pokemonsFinded,
 
 
     favorites,
@@ -46,9 +48,7 @@ export const usePokemons = () => {
     //actions
     toggleFavorite: store.toggleFavorite,
 
-
     //GetPokemonByName
-    searchPokemon,
     // Computed
     allPokemons
   }
