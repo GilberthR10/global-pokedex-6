@@ -102,6 +102,9 @@ useInfiniteScroll(
         @toggleFavorite="handleToggleFavorite(pokemon)"
       />
     </div>
+    <p v-if="!hasNextPage" class="text-gray-600 text-3xl text-center capitalize">
+      you reached the end
+    </p>
     <div v-if="isFetchingNextPage" class="flex justify-center items-center py-2">
       <IconLoader class="w-10 h-10 animate-spin" />
     </div>

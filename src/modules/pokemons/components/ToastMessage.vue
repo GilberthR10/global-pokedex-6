@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="toast-container">
     <Transition
       enter-active-class="transition duration-300 ease-out"
       enter-from-class="opacity-0 -translate-y-5"
@@ -9,7 +9,8 @@
       leave-to-class="opacity-0 -translate-y-5"
     >
       <div
-        v-show="showToast"
+        v-if="showToast"
+        data-testid="toast-message"
         class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50"
       >
         ✅ {{ text }}
@@ -17,6 +18,7 @@
     </Transition>
   </div>
 </template>
+
 <script setup lang="ts">
 interface Props {
   showToast: boolean;
