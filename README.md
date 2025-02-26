@@ -120,6 +120,11 @@ Aunque la aplicación podría haberse implementado de forma más sencilla, eleg�
 
 Esta arquitectura asegura que la aplicación funcione de manera fluida incluso si la base de datos crece significativamente, manteniendo tiempos de carga rápidos y una experiencia de usuario óptima.
 
+# Link de la App
+## [https://global-pokedex-6.vercel.app/](https://global-pokedex-6.vercel.app/)
+
+
+
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
