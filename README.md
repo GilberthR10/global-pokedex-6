@@ -3,6 +3,8 @@
 ## Enfoque y visión general
 
 Al enfrentarme a este proyecto, mi objetivo principal fue crear una aplicación que no solo fuera visualmente atractiva, sino también técnicamente robusta y escalable. Aunque la aplicación puede parecer sencilla a primera vista, implementé soluciones pensando en el manejo de grandes volúmenes de datos.
+## Miro Board
+![Alt text](/src/assets/miroBoard.png)
 
 ## Arquitectura y organización
 ```mermaid
