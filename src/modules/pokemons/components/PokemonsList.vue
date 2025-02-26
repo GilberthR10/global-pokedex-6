@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from "vue";
-import { useClipboard } from "@/composables/useClipboard";
-
+import { ref, computed } from "vue";
 import ToastMessage from "./ToastMessage.vue";
-import type { Pokemon } from "../interfaces/index.ts";
-import { usePokemons } from "../composables/usePokemon";
 import { useInfiniteScroll, useVirtualList } from "@vueuse/core";
 import PokemonListItem from "./PokemonListItem.vue";
+import PokemonDetail from "./modals/PokemonDetail.vue";
+
+import type { Pokemon } from "../interfaces/index.ts";
+import { usePokemons } from "../composables/usePokemon";
+import { useClipboard } from "@/composables/useClipboard";
+import IconLoader from "@/components/icons/IconLoader.vue";
 
 interface Props {
-  searchTerm?: string;
   showOnlyFavorites?: boolean;
   allPokemons: Pokemon[];
 }
@@ -28,9 +29,8 @@ const handleToggleFavorite = (pokemon: Pokemon) => {
   }
   toggleFavorite(pokemon);
 };
+
 //Modal component
-const PokemonDetail = defineAsyncComponent(() => import("./modals/PokemonDetail.vue"));
-// Estado del modal
 const isModalOpen = ref(false);
 const selectedPokemon = ref<Pokemon>();
 
@@ -49,10 +49,12 @@ const { copied, copyText } = useClipboard();
 
 const handleShare = () => {
   if (selectedPokemon.value) {
-    const text = `${selectedPokemon.value.name} Types: ${selectedPokemon.value.types.join(
-      ", "
-    )}`;
-    //compartir
+    const { name, weight, height, types } = selectedPokemon.value;
+
+    const typesText = types.map((t) => t.type.name).join(", ");
+
+    const text = `Name: ${name}, Weight: ${weight}, Height: ${height}, Types: ${typesText}`;
+
     copyText(text);
     isModalOpen.value = false;
     selectedPokemon.value = undefined;
@@ -71,7 +73,6 @@ useInfiniteScroll(
   containerProps.ref,
   async () => {
     if (hasNextPage.value && !isFetchingNextPage.value && !props.showOnlyFavorites) {
-      console.log("Fetching.");
       await fetchNextPage();
     }
   },
@@ -101,39 +102,53 @@ useInfiniteScroll(
         @toggleFavorite="handleToggleFavorite(pokemon)"
       />
     </div>
+    <div v-if="isFetchingNextPage" class="flex justify-center items-center py-2">
+      <IconLoader class="w-10 h-10 animate-spin" />
+    </div>
   </div>
 
   <div class="flex-1 overflow-hidden mb-25" v-else>
     <div class="h-full overflow-x-hidden">
-      <PokemonListItem
-        v-for="pokemon in favoritedPokemons"
-        :key="pokemon.id"
-        :pokemon="pokemon"
-        @click="handlePokemonClick(pokemon)"
-        @toggleFavorite="handleToggleFavorite(pokemon)"
-      />
+      <div
+        v-if="favoritedPokemons.length == 0"
+        class="text-center py-2 flex-col space-y-5"
+      >
+        <div class="text-4xl">Uh-oh!</div>
+        <p class="text-gray-600">Your Favorite Pokemon List is empty</p>
+      </div>
+      <TransitionGroup name="list">
+        <PokemonListItem
+          v-for="pokemon in favoritedPokemons"
+          :key="pokemon.id"
+          :pokemon="pokemon"
+          @click="handlePokemonClick(pokemon)"
+          @toggleFavorite="handleToggleFavorite(pokemon)"
+        />
+      </TransitionGroup>
     </div>
   </div>
 
   <!-- Modal de Detalles -->
   <Teleport to="body">
-    <Transition
-      enter-active-class="transition-opacity duration-500 ease-out"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition-opacity duration-500 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <PokemonDetail
-        v-if="selectedPokemon"
-        :is-open="isModalOpen"
-        :pokemon="selectedPokemon"
-        @close="handleCloseModal"
-        @toggleFavorite="handleToggleFavorite(selectedPokemon)"
-        @share="handleShare"
-        class="fixed inset-0 flex items-center justify-center z-50"
-      />
-    </Transition>
+    <PokemonDetail
+      v-if="selectedPokemon"
+      :is-open="isModalOpen"
+      :pokemon="selectedPokemon"
+      @close="handleCloseModal"
+      @toggleFavorite="handleToggleFavorite(selectedPokemon)"
+      @share="handleShare"
+      class="fixed inset-0 flex items-center justify-center z-50"
+    />
   </Teleport>
 </template>
+<style lang="css" scoped>
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>

@@ -1,4 +1,3 @@
-// src/components/primitives/buttons/BaseCircleButton.vue
 <script setup lang="ts">
 import { computed } from "vue";
 
@@ -32,7 +31,6 @@ const containerClass = computed(() => {
     "cursor-pointer",
     "hover:scale-105",
   ];
-  // Agregar clases adicionales
   if (props.addCss) classes.push(props.addCss);
 
   return classes.join(" ");

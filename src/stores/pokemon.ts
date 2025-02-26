@@ -26,12 +26,26 @@ export const usePokemonStore = defineStore('pokemon', () => {
   };
 
   const toggleFavorite = (pokemon: Pokemon) => {
-    const isFavorited = favorites.value.some((fav) => fav.id === pokemon.id);
+    const isFavorited = favorites.value.some(fav => fav.id === pokemon.id);
 
     if (isFavorited) {
-      favorites.value = favorites.value.filter((fav) => fav.id !== pokemon.id);
+      favorites.value = favorites.value.filter(fav => fav.id !== pokemon.id);
     } else {
-      favorites.value = [...favorites.value, { ...pokemon, isFavorite: true }];
+      const pokemonWithFavorite = {
+        ...pokemon,
+        isFavorite: true
+      };
+
+      favorites.value = [...favorites.value, pokemonWithFavorite];
+    }
+
+    // Actualiza lista principal
+    const index = pokemonsList.value.findIndex(p => p.id === pokemon.id);
+    if (index !== -1) {
+      pokemonsList.value[index] = {
+        ...pokemonsList.value[index],
+        isFavorite: !isFavorited
+      };
     }
   };
 

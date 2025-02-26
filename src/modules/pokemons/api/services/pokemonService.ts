@@ -3,7 +3,6 @@ import apiClient from "../axiosInstance";
 import type { Pokemon, PokemonListItem, PokemonListResponse, PokemonListResult } from "../../interfaces/index";
 
 
-// Obtener lista de Pokémon con detalles incluidos
 export const getPokemonList = async ({ pageParam }: { pageParam: unknown }): Promise<PokemonListResult> => {
   const limit = 20;
   const offset = typeof pageParam === "number" ? pageParam : 0;
@@ -35,10 +34,24 @@ export const getPokemonList = async ({ pageParam }: { pageParam: unknown }): Pro
   };
 };
 
-// Obtener detalles de un Pokémon por nombre
 export const getPokemonByName = async (name: string): Promise<Pokemon> => {
-  const response = await apiClient.get<Pokemon>(`/pokemon/${name}`);
-  return response.data;
+  try {
+    const { data } = await apiClient.get<PokemonListItem>(`/pokemon/${name.toLowerCase()}`);
+    return {
+      id: data.id,
+      name: data.name,
+      weight: data.weight,
+      height: data.height,
+      types: data.types,
+      image: data.sprites?.other?.dream_world?.front_default
+        || data.sprites?.other?.['official-artwork']?.front_default
+        || data.sprites?.front_default
+        || null,
+      isFavorite: false,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 

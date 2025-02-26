@@ -30,7 +30,7 @@ const handleClose = () => {
         <!-- Close button -->
         <button
           @click="handleClose"
-          class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 z-10"
+          class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 z-10 cursor-pointer"
         >
           <IconClose />
         </button>

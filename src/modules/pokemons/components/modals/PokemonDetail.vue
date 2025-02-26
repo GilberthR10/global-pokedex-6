@@ -2,7 +2,9 @@
 import BaseModal from "@/components/BaseModal.vue";
 import BaseCircleButton from "@/components/BaseCircleButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import type { Pokemon } from "../../interfaces/index.ts";
+import type { Pokemon } from "../../interfaces/index";
+import IconLoader from "@/components/icons/IconLoader.vue";
+import { ref } from "vue";
 
 interface Props {
   isOpen: boolean;
@@ -26,6 +28,11 @@ const handleShare = () => {
 const handleToggleFavorite = () => {
   emit("toggleFavorite");
 };
+const isLoading = ref(true);
+
+const onLoad = () => {
+  isLoading.value = false;
+};
 </script>
 
 <template>
@@ -35,9 +42,16 @@ const handleToggleFavorite = () => {
       <div
         class="relative bg-blue-100 rounded-t-lg overflow-hidden bg-[url(@/assets/pokemon-bg.png)] bg-center bg-cover"
       >
+        <div
+          v-if="isLoading"
+          class="flex justify-center items-center py-2 absolute inset-0"
+        >
+          <IconLoader class="w-50 h-20 animate-spin" />
+        </div>
         <img
           :src="pokemon.image || undefined"
           :alt="pokemon.name"
+          @load="onLoad"
           class="w-full h-48 object-contain block"
         />
       </div>
